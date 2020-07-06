@@ -121,19 +121,19 @@ class CatConverter:
         
         str_s = str_q[0:1]
         if str_s in CatConverter.mapper:
-            str_q = str_q.replace(str_s, CatConverter.mapper[str_s])
+            str_q = str_q.replace(str_s, CatConverter.mapper[str_s], 1)
         
         return str_q
     
     
     @staticmethod
-    def __encode_quant(str_q):
+    def __encode_quant(str_q, thresh=3):
         """replace -1 -> a, 10 -> A, etc."""
         
-        if len(str_q) >= 3:
+        if len(str_q) >= thresh:
             str_s = str_q[0:2]
             if(str_s in CatConverter.mapper.inv):
-                str_q = str_q.replace(str_s, CatConverter.mapper.inv[str_s])               
+                str_q = str_q.replace(str_s, CatConverter.mapper.inv[str_s], 1)
         
         return str_q
     
@@ -200,7 +200,7 @@ class CatConverter:
         obj_line.int_deg_freedom = int(str_line[29:31])
         
         obj_line.E = float(str_line[31:41])           
-        obj_line.g = int(str_line[41:44])
+        obj_line.g = int(CatConverter.__decode_quant(str_line[41:44]))
         
         obj_line.int_cat_tag  = int(str_line[44:51])
         
@@ -226,7 +226,7 @@ class CatConverter:
         
         str_out += "%13.4f%8.4f"% (obj_line.freq, obj_line.freq_err)
         str_out += "%8.4f%2d"   % (obj_line.log_I, obj_line.int_deg_freedom)
-        str_out += "%10.4f%3d"  % (obj_line.E, obj_line.g)
+        str_out += "%10.4f%3s"  % (obj_line.E, CatConverter.__encode_quant(str(obj_line.g), thresh=4))
         str_out += "%7d"        % (obj_line.int_cat_tag)
         str_out += "%4d%s "     % (obj_line.int_fmt, str_quanta)
                
