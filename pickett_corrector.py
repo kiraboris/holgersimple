@@ -2,12 +2,18 @@
 #
 
 import math
-from numpy import sign
 from werkzeug.datastructures import MultiDict
 
 from models import Line, State, qid
 
-import pickett_io
+
+def sign(x):
+    if x > 0:
+        return +1
+    elif x < 0:
+        return -1
+    else:
+        return 0
 
 class Corrector:
     """general methods on transitions and states"""
