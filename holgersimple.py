@@ -1,7 +1,7 @@
 # python 3
 
 import sys
-import shutil
+import begin
 from bidict import bidict
 
 import pickett_io
@@ -39,7 +39,7 @@ else:
         1: ((1, 0, 0),  +1, 1, 1),
     })
     
-    
+qm = Corrector(SymmRotor())
 
 def _extract_v(quanta):
     """docstring"""
@@ -94,15 +94,14 @@ def make_mrg(cat_file, lin_file, egy_file, egy_file_new, mrg_file, fmt):
     pickett_io.save(mrg_file, mrg_entries)
     
 
-
-def main():
+def main(looper):
     for cat_id in looper:
         
         jobs = looper[cat_id]
         
-        if "int_fmt_override" in globals():
-            int_fmt = int_fmt_override
-        elif('icat' in jobs):
+        #if "int_fmt_override" in globals():
+        #    int_fmt = int_fmt_override
+        if('icat' in jobs):
             int_fmt = pickett_io.get_quantum_fmt("%si.cat" % cat_id)
         elif('cat' in jobs):
             int_fmt = pickett_io.get_quantum_fmt("%s.cat"  % cat_id)
@@ -138,24 +137,42 @@ def main():
 
 
 # *** main part ***
-qm = Corrector(SymmRotor())   
+@begin.start
+def run(prefix, icat=False, cat=False, lin=False, mrglin=False, mrg=False, egy=False):
 
-#looper = {"042515": ['icat', 'lin', 'mrg', 'egy']}
+    #looper = {"042515": ['icat', 'lin', 'mrg', 'egy']}
 
-#looper = {"042508": ['egy'], "042509": ['egy']} 
+    #looper = {"042508": ['egy'], "042509": ['egy']}
 
-#looper = {"042513": ['egy'], "042514": ['egy']}
+    #looper = {"042513": ['egy'], "042514": ['egy']}
 
-#looper = {"C:\\Users\\Asus\\Downloads\\c041501": ['cat', 'mrg.lin', 'mrg', 'egy']}
+    #looper = {"C:\\Users\\Asus\\Downloads\\c041501": ['cat', 'mrg.lin', 'mrg', 'egy']}
 
-looper = {"C:\\Users\\Asus\\Downloads\\Propin\\c042524": ['cat', 'egy'],
-          "C:\\Users\\Asus\\Downloads\\Propin\\c042523": ['cat', 'egy'],
-          "C:\\Users\\Asus\\Downloads\\Propin\\c042522": ['cat', 'egy']
-          }
+    #looper = {"C:\\Users\\Asus\\Downloads\\Propin\\c042524": ['cat', 'egy'],
+    #          "C:\\Users\\Asus\\Downloads\\Propin\\c042523": ['cat', 'egy'],
+    #          "C:\\Users\\Asus\\Downloads\\Propin\\c042522": ['cat', 'egy']
+    #          }
 
-#int_fmt_override = 1303 
+    lst_options = []
 
-main()
+    if icat:
+        lst_options.append("icat")
+    if cat:
+        lst_options.append("cat")
+    if lin:
+        lst_options.append("lin")
+    if mrglin:
+        lst_options.append("mrg.lin")
+    if mrg:
+        lst_options.append("mrg")
+    if egy:
+        lst_options.append("egy")
+
+    looper = {prefix: lst_options}
+
+    #int_fmt_override = 1303
+
+    main(looper)
 
 
 
